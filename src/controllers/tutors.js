@@ -1,7 +1,7 @@
 const Tutor = require('../models/tutor')
 const {cloudinary} = require('../cloudinary') 
 
-module.exports.index = async(req,res,next) => {
+module.exports.index = async(req,res,next) => {  //-->> load all teacher tutorpage bases on index 
     try{
         const tutors=await Tutor.find({})
         res.render('tutors/index',{tutors})
@@ -19,7 +19,7 @@ module.exports.createTutorPost = async(req,res,next) => {
         const subjectString=req.body.subjects
         const subjectArr=subjectString.split(', ')
         newTutor.subjects=subjectArr
-        await newTutor.save()
+        await newTutor.save()    //----->> Mongose data
         req.flash('success', 'Successfully Created a Post!')
         res.redirect(`/tutors/${newTutor._id}`)
     }
@@ -60,7 +60,7 @@ module.exports.showTutorPost = async (req, res, next) => {
 module.exports.updateTutorPost = async (req, res, next) => {
     try{
         const {id}=req.params
-        const tutor = await Tutor.findByIdAndUpdate(id, {...req.body.tutor})
+        const tutor = await Tutor.findByIdAndUpdate(id, {...req.body.tutor})   //-->> Moongose function
         const subjectString=req.body.subjects
         const subjectArr=subjectString.split(', ')
         tutor.subjects=subjectArr

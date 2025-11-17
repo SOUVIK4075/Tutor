@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express=require('express')
-const app=express()
-const mongoose=require('mongoose')
+const app=express()    //-->> project instance
+const mongoose=require('mongoose')  
 const path=require('path')
 const methodOverride=require('method-override')
 const ejsMate=require('ejs-mate')
@@ -24,13 +24,13 @@ async function main() {
 
 app.engine('ejs', ejsMate)
 app.set('view engine','ejs')
-app.set('views',path.join(__dirname,'views'))
+app.set('views',path.join(__dirname,'views'))   //--> frontend load in this path
 
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({extended: true}))   
 app.use(methodOverride('_method'))
-app.use(express.static(path.join(__dirname,'public')))
+app.use(express.static(path.join(__dirname,'public')))  //--->> all static things attached with public folder
 
-const sessionConfig = {
+const sessionConfig = {   //__. remember the user in this time
     secret: 'thisshouldbeabettersecret!',
     resave: false,
     saveUninitialized: true,
@@ -42,7 +42,7 @@ const sessionConfig = {
 }
 
 app.use(session(sessionConfig))
-app.use(flash())
+app.use(flash())     //--> 
 
 app.use(passport.initialize())
 app.use(passport.session())
@@ -50,7 +50,7 @@ passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
-app.use((req,res,next) => {
+app.use((req,res,next) => {      //-->> Middleware  , check if any user are there
     res.locals.currentUser=req.user
     res.locals.returnTo=''
     res.locals.success=req.flash('success')
@@ -58,7 +58,7 @@ app.use((req,res,next) => {
     next()
 })
 
-app.use('/tutors', tutorRoutes)
+app.use('/tutors', tutorRoutes)      //-->> see again
 app.use('/tutors/:id/reviews', reviewRoutes)
 app.use('/', userRoutes)
 
